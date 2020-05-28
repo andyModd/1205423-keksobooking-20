@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Андрей Глушко](https://up.htmlacademy.ru/javascript/20/user/1205423).
-* Наставник: `Неизвестно`.
+* Наставник: [Саяжан Онласын](https://htmlacademy.ru/profile/crepiks).
 
 ---
 
