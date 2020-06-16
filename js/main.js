@@ -43,7 +43,7 @@ var getRandomArray = function (array) {
   return shuffledArray.slice(0, newLength);
 };
 
-var getRandomOffer = function (types, features, photos) {
+var getRandomOffer = function (featuresArray, photosArray) {
   var offer = {
     'author': {'avatar': 'img/avatars/user0' + getRandomInteger(9) + '.png'},
     'offer': {
@@ -55,9 +55,9 @@ var getRandomOffer = function (types, features, photos) {
       'guests': getRandomInteger(3),
       'checkin': hours[getRandomInteger(hours.length)],
       'checkout': hours[getRandomInteger(hours.length)],
-      'features': getRandomArray(features),
+      'features': getRandomArray(featuresArray),
       'description': 'строка с описанием',
-      'photos': getRandomArray(photos)
+      'photos': getRandomArray(photosArray)
     },
     'location': {
       'x': getRandomInteger(1200, 354) - 32.5,
@@ -76,8 +76,7 @@ var getSeveralOffers = function (amount) {
 };
 
 var createPin = function (offer) {
-  pin = template.cloneNode(true);
-  console.log(pin);
+  var pin = template.cloneNode(true);
   var img = pin.querySelector('img');
   img.src = offer['author']['avatar'];
   img.alt = offer['offer']['title'];
@@ -90,13 +89,12 @@ var fillOffers = function () {
   var documentFragment = document.createDocumentFragment();
   var offers = [];
   offers = getSeveralOffers(8);
-  console.log(offers);
   for (var i = 0; i < offers.length; i++) {
     var createdPin = createPin(offers[i]);
     documentFragment.appendChild(createdPin);
   }
   mapForPins.appendChild(documentFragment);
-}
+};
 
 fillOffers();
 
