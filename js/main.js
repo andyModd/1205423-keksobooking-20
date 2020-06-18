@@ -70,7 +70,7 @@ var getRandomOffer = function (featuresArray, photosArray) {
 var getSeveralOffers = function (amount) {
   var offers = [];
   for (var i = 0; i < amount; i++) {
-    offers.push(getRandomOffer(types, features, photos));
+    offers.push(getRandomOffer(features, photos));
   }
   return offers;
 };
