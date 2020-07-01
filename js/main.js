@@ -144,8 +144,17 @@ function createCard(offer) {
   fillFeatures(offer.offer.features);
   fillPhotos(offer.offer.photos, cardPhotoContainer);
   document.querySelector('.map').insertBefore(card, document.querySelector('.map__filters-container'));
-};
+}
+
+function disableForm() {
+  var fieldSets = document.querySelectorAll()
+}
 offers = getSeveralOffers(8);
-map.classList.remove('map--faded');
-fillOffers();
-createCard(offers[0]);
+
+window.addEventListener('load', function() {
+  Array.from(document.querySelector('.map__filters').children).forEach(tag => tag.disabled = 'true');
+  Array.from(document.querySelector('.ad-form').children).forEach(tag => tag.disabled = 'true');
+});
+//map.classList.remove('map--faded');
+//fillOffers();
+//createCard(offers[0]);
