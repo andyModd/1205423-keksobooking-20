@@ -24,6 +24,7 @@ var offers = [];
 
 var map = document.querySelector('.map');
 var mapForPins = map.querySelector('.map__pins');
+var btnMapPin = document.querySelector('.map__pin');
 var template = document.querySelector('#pin').content.querySelector('.map__pin');
 var templateCard = document.querySelector('#card').content.querySelector('.map__card');
 var card = templateCard.cloneNode(true);
@@ -37,6 +38,10 @@ var cardTime = card.querySelector('.popup__text--time');
 var cardDescription = card.querySelector('.popup__description');
 var cardPhotoContainer = card.querySelector('.popup__photos');
 var cardPhoto =  card.querySelector('.popup__photo');
+var adForm = document.querySelector('.ad-form');
+var mapFilter = document.querySelector('.map__filters');
+var listCapacity = document.querySelector('#capacity');
+var listRoomNumber = document.querySelector('#room_number');
 
 var getRandomInteger = function (maxValue, minValue) {
   if (minValue === undefined) {
@@ -146,15 +151,39 @@ function createCard(offer) {
   document.querySelector('.map').insertBefore(card, document.querySelector('.map__filters-container'));
 }
 
-function disableForm() {
-  var fieldSets = document.querySelectorAll()
-}
 offers = getSeveralOffers(8);
 
-window.addEventListener('load', function() {
-  Array.from(document.querySelector('.map__filters').children).forEach(tag => tag.disabled = 'true');
-  Array.from(document.querySelector('.ad-form').children).forEach(tag => tag.disabled = 'true');
+window.addEventListener('load', () => {
+  Array.from(mapFilter.children).forEach(tag => tag.disabled = true);
+  Array.from(adForm.children).forEach(tag => tag.disabled = true);
+
+  document.querySelector('#address').value = `
+    ${Math.floor(btnMapPin.offsetLeft + btnMapPin.offsetHeight / 2)},
+    ${Math.floor(btnMapPin.offsetTop + btnMapPin.offsetWidth / 2)}`;
 });
-//map.classList.remove('map--faded');
+
+btnMapPin.addEventListener('mousedown', evt => {
+  if (evt.which === 1){
+    map.classList.remove('map--faded');
+    Array.from(mapFilter.children).forEach(tag => tag.disabled = false);
+    Array.from(adForm.children).forEach(tag => tag.disabled = false);
+
+    document.querySelector('#address').value = `
+      ${Math.floor(btnMapPin.offsetLeft + btnMapPin.offsetHeight + 10)},
+      ${Math.floor(btnMapPin.offsetTop + btnMapPin.offsetWidth + 22)}`;
+  }
+});
+
+function validate(evt) {
+  if (listRoomNumber.selectedIndex == 0 && listCapacity.selectedIndex == 0 || listCapacity.selectedIndex == 1 || listCapacity.selectedIndex == 3 ) {
+    console.log(listRoomNumber.selectedIndex, listCapacity.selectedIndex);
+    evt.preventDefault();
+    listCapacity.options[listCapacity.selectedIndex].value = '';
+    listCapacity.setCustomValidity('Неподходящее количество гостей для данной квартиры 1');
+  } else {
+    listCapacity.setCustomValidity('');
+  }
+}
+adForm.addEventListener('submit', validate);
 //fillOffers();
 //createCard(offers[0]);
