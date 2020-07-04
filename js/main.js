@@ -157,9 +157,7 @@ window.addEventListener('load', () => {
   Array.from(mapFilter.children).forEach(tag => tag.disabled = true);
   Array.from(adForm.children).forEach(tag => tag.disabled = true);
 
-  document.querySelector('#address').value = `
-    ${Math.floor(btnMapPin.offsetLeft + btnMapPin.offsetHeight / 2)},
-    ${Math.floor(btnMapPin.offsetTop + btnMapPin.offsetWidth / 2)}`;
+  document.querySelector('#address').value = `${Math.floor(btnMapPin.offsetLeft + btnMapPin.offsetHeight / 2)}, ${Math.floor(btnMapPin.offsetTop + btnMapPin.offsetWidth / 2)}`;
 });
 
 btnMapPin.addEventListener('mousedown', evt => {
@@ -168,22 +166,48 @@ btnMapPin.addEventListener('mousedown', evt => {
     Array.from(mapFilter.children).forEach(tag => tag.disabled = false);
     Array.from(adForm.children).forEach(tag => tag.disabled = false);
 
-    document.querySelector('#address').value = `
-      ${Math.floor(btnMapPin.offsetLeft + btnMapPin.offsetHeight + 10)},
-      ${Math.floor(btnMapPin.offsetTop + btnMapPin.offsetWidth + 22)}`;
+    document.querySelector('#address').value = `${Math.floor(btnMapPin.offsetLeft + btnMapPin.offsetHeight + 10)}, ${Math.floor(btnMapPin.offsetTop + btnMapPin.offsetWidth + 22)}`;
   }
 });
 
-function validate(evt) {
-  if (listRoomNumber.selectedIndex == 0 && listCapacity.selectedIndex == 0 || listCapacity.selectedIndex == 1 || listCapacity.selectedIndex == 3 ) {
-    console.log(listRoomNumber.selectedIndex, listCapacity.selectedIndex);
-    evt.preventDefault();
-    listCapacity.options[listCapacity.selectedIndex].value = '';
-    listCapacity.setCustomValidity('Неподходящее количество гостей для данной квартиры 1');
+btnMapPin.addEventListener('keydown', evt => {
+  if (evt.key === 'Enter') {
+    map.classList.remove('map--faded');
+    Array.from(mapFilter.children).forEach(tag => tag.disabled = false);
+    Array.from(adForm.children).forEach(tag => tag.disabled = false);
+    document.querySelector('#address').value = `${Math.floor(btnMapPin.offsetLeft + btnMapPin.offsetHeight + 10)}, ${Math.floor(btnMapPin.offsetTop + btnMapPin.offsetWidth + 22)}`;
+  }
+});
+
+
+listCapacity.addEventListener('invalid', () => {
+  if ((listRoomNumber.selectedIndex === 0 && listCapacity.selectedIndex === 0) || (listRoomNumber.selectedIndex === 0 && listCapacity.selectedIndex === 1) || (listRoomNumber.selectedIndex === 0 && listCapacity.selectedIndex === 3)) {
+    listCapacity.setCustomValidity('Выберите другое количество гостей');
+  } else if ((listRoomNumber.selectedIndex === 1 && listCapacity.selectedIndex === 0) || (listRoomNumber.selectedIndex === 1 && listCapacity.selectedIndex === 3)) {
+    listCapacity.setCustomValidity('Выберите другое количество гостей');
+  }  else if (listRoomNumber.selectedIndex === 2 && listCapacity.selectedIndex === 3) {
+    listCapacity.setCustomValidity('Выберите другое количество гостей');
+  } else if ((listRoomNumber.selectedIndex === 3 && listCapacity.selectedIndex === 0) || (listRoomNumber.selectedIndex === 3 && listCapacity.selectedIndex === 1) || (listRoomNumber.selectedIndex === 3 && listCapacity.selectedIndex === 2)) {
+    listCapacity.setCustomValidity('Эта квартира не для гостей');
   } else {
     listCapacity.setCustomValidity('');
   }
-}
-adForm.addEventListener('submit', validate);
+});
+
+adForm.addEventListener('submit', (evt) => {
+  if ((listRoomNumber.selectedIndex === 0 && listCapacity.selectedIndex === 0) || (listRoomNumber.selectedIndex === 0 && listCapacity.selectedIndex === 1) || (listRoomNumber.selectedIndex === 0 && listCapacity.selectedIndex === 3)) {
+    evt.preventDefault();
+    listCapacity.setCustomValidity('Выберите другое количество гостей');
+  } else if ((listRoomNumber.selectedIndex === 1 && listCapacity.selectedIndex === 0) || (listRoomNumber.selectedIndex === 1 && listCapacity.selectedIndex === 3)) {
+    evt.preventDefault();
+    listCapacity.setCustomValidity('Выберите другое количество гостей');
+  }  else if (listRoomNumber.selectedIndex === 2 && listCapacity.selectedIndex === 3) {
+    evt.preventDefault();
+    listCapacity.setCustomValidity('Выберите другое количество гостей');
+  } else if ((listRoomNumber.selectedIndex === 3 && listCapacity.selectedIndex === 0) || (listRoomNumber.selectedIndex === 3 && listCapacity.selectedIndex === 1) || (listRoomNumber.selectedIndex === 3 && listCapacity.selectedIndex === 2)) {
+    evt.preventDefault();
+    listCapacity.setCustomValidity('Эта квартира не для гостей');
+  }
+});
 //fillOffers();
 //createCard(offers[0]);
