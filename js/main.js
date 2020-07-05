@@ -20,8 +20,13 @@ var photos = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
+var roomsValidationRules = {
+  '1': ['1', '2', '3'],
+  '2': ['2', '3'],
+  '3': ['3'],
+  '0': ['100']
+};
 var offers = [];
-
 var map = document.querySelector('.map');
 var mapForPins = map.querySelector('.map__pins');
 var btnMapPin = document.querySelector('.map__pin');
@@ -163,6 +168,7 @@ window.addEventListener('load', () => {
 btnMapPin.addEventListener('mousedown', evt => {
   if (evt.which === 1){
     map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
     Array.from(mapFilter.children).forEach(tag => tag.disabled = false);
     Array.from(adForm.children).forEach(tag => tag.disabled = false);
 
@@ -173,6 +179,7 @@ btnMapPin.addEventListener('mousedown', evt => {
 btnMapPin.addEventListener('keydown', evt => {
   if (evt.key === 'Enter') {
     map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
     Array.from(mapFilter.children).forEach(tag => tag.disabled = false);
     Array.from(adForm.children).forEach(tag => tag.disabled = false);
     document.querySelector('#address').value = `${Math.floor(btnMapPin.offsetLeft + btnMapPin.offsetHeight + 10)}, ${Math.floor(btnMapPin.offsetTop + btnMapPin.offsetWidth + 22)}`;
@@ -181,32 +188,19 @@ btnMapPin.addEventListener('keydown', evt => {
 
 
 listCapacity.addEventListener('invalid', () => {
-  if ((listRoomNumber.selectedIndex === 0 && listCapacity.selectedIndex === 0) || (listRoomNumber.selectedIndex === 0 && listCapacity.selectedIndex === 1) || (listRoomNumber.selectedIndex === 0 && listCapacity.selectedIndex === 3)) {
-    listCapacity.setCustomValidity('Выберите другое количество гостей');
-  } else if ((listRoomNumber.selectedIndex === 1 && listCapacity.selectedIndex === 0) || (listRoomNumber.selectedIndex === 1 && listCapacity.selectedIndex === 3)) {
-    listCapacity.setCustomValidity('Выберите другое количество гостей');
-  }  else if (listRoomNumber.selectedIndex === 2 && listCapacity.selectedIndex === 3) {
-    listCapacity.setCustomValidity('Выберите другое количество гостей');
-  } else if ((listRoomNumber.selectedIndex === 3 && listCapacity.selectedIndex === 0) || (listRoomNumber.selectedIndex === 3 && listCapacity.selectedIndex === 1) || (listRoomNumber.selectedIndex === 3 && listCapacity.selectedIndex === 2)) {
-    listCapacity.setCustomValidity('Эта квартира не для гостей');
-  } else {
+  if (roomsValidationRules[listCapacity.value].includes(listRoomNumber.value)) {
     listCapacity.setCustomValidity('');
+  } else {
+    listCapacity.setCustomValidity('Выберите другое количество гостей');
   }
 });
 
 adForm.addEventListener('submit', (evt) => {
-  if ((listRoomNumber.selectedIndex === 0 && listCapacity.selectedIndex === 0) || (listRoomNumber.selectedIndex === 0 && listCapacity.selectedIndex === 1) || (listRoomNumber.selectedIndex === 0 && listCapacity.selectedIndex === 3)) {
+  if (roomsValidationRules[listCapacity.value].includes(listRoomNumber.value)) {
+    return;
+  } else {
     evt.preventDefault();
     listCapacity.setCustomValidity('Выберите другое количество гостей');
-  } else if ((listRoomNumber.selectedIndex === 1 && listCapacity.selectedIndex === 0) || (listRoomNumber.selectedIndex === 1 && listCapacity.selectedIndex === 3)) {
-    evt.preventDefault();
-    listCapacity.setCustomValidity('Выберите другое количество гостей');
-  }  else if (listRoomNumber.selectedIndex === 2 && listCapacity.selectedIndex === 3) {
-    evt.preventDefault();
-    listCapacity.setCustomValidity('Выберите другое количество гостей');
-  } else if ((listRoomNumber.selectedIndex === 3 && listCapacity.selectedIndex === 0) || (listRoomNumber.selectedIndex === 3 && listCapacity.selectedIndex === 1) || (listRoomNumber.selectedIndex === 3 && listCapacity.selectedIndex === 2)) {
-    evt.preventDefault();
-    listCapacity.setCustomValidity('Эта квартира не для гостей');
   }
 });
 //fillOffers();
