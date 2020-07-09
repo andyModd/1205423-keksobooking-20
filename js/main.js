@@ -45,8 +45,8 @@ var cardPhotoContainer = card.querySelector('.popup__photos');
 var cardPhoto =  card.querySelector('.popup__photo');
 var adForm = document.querySelector('.ad-form');
 var mapFilter = document.querySelector('.map__filters');
-var listCapacity = document.querySelector('#capacity');
-var listRoomNumber = document.querySelector('#room_number');
+var capacitySelect = document.querySelector('#capacity');
+var roomSelect = document.querySelector('#room_number');
 
 var getRandomInteger = function (maxValue, minValue) {
   if (minValue === undefined) {
@@ -186,22 +186,29 @@ btnMapPin.addEventListener('keydown', evt => {
   }
 });
 
+function selectRoomCapacityHandler() {
+  switch (true) {
+    case (roomSelect.value === '100' && capacitySelect.value !== '0'):
+      roomSelect.setCustomValidity('Для выбранного количества комнат размещение гостей невозможно');
+      break;
 
-listCapacity.addEventListener('invalid', () => {
-  if (roomsValidationRules[listCapacity.value].includes(listRoomNumber.value)) {
-    listCapacity.setCustomValidity('');
-  } else {
-    listCapacity.setCustomValidity('Выберите другое количество гостей');
-  }
-});
+    case (roomSelect.value !== '100' && capacitySelect.value === '0'):
+      capacitySelect.setCustomValidity('Выберите количество гостей');
+      break;
 
-adForm.addEventListener('submit', (evt) => {
-  if (roomsValidationRules[listCapacity.value].includes(listRoomNumber.value)) {
-    return;
-  } else {
-    evt.preventDefault();
-    listCapacity.setCustomValidity('Выберите другое количество гостей');
+    case (capacitySelect.value > roomSelect.value && capacitySelect.value !== '0'):
+      roomSelect.setCustomValidity('Количество комнат не должно быть меньше количества гостей');
+      break;
+
+    default:
+      roomSelect.setCustomValidity('');
+      capacitySelect.setCustomValidity('');
+      break;
   }
-});
+}
+
+roomSelect.addEventListener('input', selectRoomCapacityHandler);
+capacitySelect.addEventListener('input', selectRoomCapacityHandler);
+
 //fillOffers();
 //createCard(offers[0]);
