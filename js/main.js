@@ -20,10 +20,16 @@ var photos = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
+var roomsValidationRules = {
+  '1': ['1', '2', '3'],
+  '2': ['2', '3'],
+  '3': ['3'],
+  '0': ['100']
+};
 var offers = [];
-
 var map = document.querySelector('.map');
 var mapForPins = map.querySelector('.map__pins');
+var btnMapPin = document.querySelector('.map__pin');
 var template = document.querySelector('#pin').content.querySelector('.map__pin');
 var templateCard = document.querySelector('#card').content.querySelector('.map__card');
 var card = templateCard.cloneNode(true);
@@ -37,6 +43,10 @@ var cardTime = card.querySelector('.popup__text--time');
 var cardDescription = card.querySelector('.popup__description');
 var cardPhotoContainer = card.querySelector('.popup__photos');
 var cardPhoto =  card.querySelector('.popup__photo');
+var adForm = document.querySelector('.ad-form');
+var mapFilter = document.querySelector('.map__filters');
+var capacitySelect = document.querySelector('#capacity');
+var roomSelect = document.querySelector('#room_number');
 
 var getRandomInteger = function (maxValue, minValue) {
   if (minValue === undefined) {
@@ -144,8 +154,61 @@ function createCard(offer) {
   fillFeatures(offer.offer.features);
   fillPhotos(offer.offer.photos, cardPhotoContainer);
   document.querySelector('.map').insertBefore(card, document.querySelector('.map__filters-container'));
-};
+}
+
 offers = getSeveralOffers(8);
-map.classList.remove('map--faded');
-fillOffers();
-createCard(offers[0]);
+
+window.addEventListener('load', () => {
+  Array.from(mapFilter.children).forEach(tag => tag.disabled = true);
+  Array.from(adForm.children).forEach(tag => tag.disabled = true);
+
+  document.querySelector('#address').value = `${Math.floor(btnMapPin.offsetLeft + btnMapPin.offsetHeight / 2)}, ${Math.floor(btnMapPin.offsetTop + btnMapPin.offsetWidth / 2)}`;
+});
+
+btnMapPin.addEventListener('mousedown', evt => {
+  if (evt.which === 1){
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+    Array.from(mapFilter.children).forEach(tag => tag.disabled = false);
+    Array.from(adForm.children).forEach(tag => tag.disabled = false);
+
+    document.querySelector('#address').value = `${Math.floor(btnMapPin.offsetLeft + btnMapPin.offsetHeight + 10)}, ${Math.floor(btnMapPin.offsetTop + btnMapPin.offsetWidth + 22)}`;
+  }
+});
+
+btnMapPin.addEventListener('keydown', evt => {
+  if (evt.key === 'Enter') {
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+    Array.from(mapFilter.children).forEach(tag => tag.disabled = false);
+    Array.from(adForm.children).forEach(tag => tag.disabled = false);
+    document.querySelector('#address').value = `${Math.floor(btnMapPin.offsetLeft + btnMapPin.offsetHeight + 10)}, ${Math.floor(btnMapPin.offsetTop + btnMapPin.offsetWidth + 22)}`;
+  }
+});
+
+function selectRoomCapacityHandler() {
+  switch (true) {
+    case (roomSelect.value === '100' && capacitySelect.value !== '0'):
+      roomSelect.setCustomValidity('Для выбранного количества комнат размещение гостей невозможно');
+      break;
+
+    case (roomSelect.value !== '100' && capacitySelect.value === '0'):
+      capacitySelect.setCustomValidity('Выберите количество гостей');
+      break;
+
+    case (capacitySelect.value > roomSelect.value && capacitySelect.value !== '0'):
+      roomSelect.setCustomValidity('Количество комнат не должно быть меньше количества гостей');
+      break;
+
+    default:
+      roomSelect.setCustomValidity('');
+      capacitySelect.setCustomValidity('');
+      break;
+  }
+}
+
+roomSelect.addEventListener('input', selectRoomCapacityHandler);
+capacitySelect.addEventListener('input', selectRoomCapacityHandler);
+
+//fillOffers();
+//createCard(offers[0]);
