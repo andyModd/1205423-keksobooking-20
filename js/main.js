@@ -27,6 +27,8 @@ var roomsValidationRules = {
   '0': ['100']
 };
 var offers = [];
+
+var pinsDictionary = {};
 var map = document.querySelector('.map');
 var mapForPins = map.querySelector('.map__pins');
 var btnMapPin = document.querySelector('.map__pin');
@@ -114,6 +116,8 @@ var fillOffers = function () {
   var documentFragment = document.createDocumentFragment();
   for (var i = 0; i < offers.length; i++) {
     var createdPin = createPin(offers[i]);
+    var setting = createdPin.outerHTML;
+    pinsDictionary[setting] = offers[i];
     documentFragment.appendChild(createdPin);
   }
   mapForPins.appendChild(documentFragment);
@@ -210,5 +214,11 @@ function selectRoomCapacityHandler() {
 roomSelect.addEventListener('input', selectRoomCapacityHandler);
 capacitySelect.addEventListener('input', selectRoomCapacityHandler);
 
-//fillOffers();
+mapForPins.addEventListener('click', evt => {
+  var mapPin = evt.target.closest('.map__pin').outerHTML;
+  createCard(pinsDictionary[mapPin]);
+});
+
+fillOffers();
+console.log(pinsDictionary);
 //createCard(offers[0]);
