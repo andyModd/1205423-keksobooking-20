@@ -49,6 +49,9 @@ var adForm = document.querySelector('.ad-form');
 var mapFilter = document.querySelector('.map__filters');
 var capacitySelect = document.querySelector('#capacity');
 var roomSelect = document.querySelector('#room_number');
+var offerTitle = document.querySelector('#title');
+var priceInput = document.querySelector('#price');
+var typeSelect = document.querySelector('#type');
 
 var getRandomInteger = function (maxValue, minValue) {
   if (minValue === undefined) {
@@ -211,6 +214,54 @@ function selectRoomCapacityHandler() {
   }
 }
 
+offerTitle.addEventListener('invalid', () => {
+  switch (true) {
+    case offerTitle.validity.tooShort:
+      offerTitle.setCustomValidity('Заголовок объявления должен состоять минимум из 30-ти символов');
+      break;
+    case offerTitle.validity.tooLong:
+      offerTitle.setCustomValidity('Заголовок объявления не должен превышать 100 символов');
+      break;
+    case offerTitle.validity.valueMissing:
+      offerTitle.setCustomValidity('Обязательное поле');
+      break;
+    default:
+    offerTitle.setCustomValidity('');
+    break;
+  }
+});
+
+typeSelect.addEventListener('change', () => {
+  switch (typeSelect.value) {
+    case 'bungalo':
+      priceInput.minValue = 0;
+      break;
+      case 'flat':
+      priceInput.minValue = 1000;
+      break;
+      case 'house':
+      priceInput.minValue = 5000;
+      break;
+      case 'palace':
+      priceInput.minValue = 10000;
+      break;
+  }
+});
+
+priceInput.addEventListener('invalid', () => {
+  switch (true) {
+    case priceInput.value < priceInput.minValue:
+      priceInput.setCustomValidity(`Цена за ночь не может быть меньше ${priceInput.minValue}`);
+      break;
+    case priceInput.validity.valueMissing:
+      priceInput.setCustomValidity('Введите цену жилья за ночь');
+      break;
+    default:
+      priceInput.setCustomValidity('');
+      break;
+  }
+});
+
 roomSelect.addEventListener('input', selectRoomCapacityHandler);
 capacitySelect.addEventListener('input', selectRoomCapacityHandler);
 
@@ -221,4 +272,4 @@ mapForPins.addEventListener('click', evt => {
 
 fillOffers();
 console.log(pinsDictionary);
-//createCard(offers[0]);
+createCard(offers[0]);
