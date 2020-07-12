@@ -52,6 +52,8 @@ var roomSelect = document.querySelector('#room_number');
 var offerTitle = document.querySelector('#title');
 var priceInput = document.querySelector('#price');
 var typeSelect = document.querySelector('#type');
+var timeIn = document.querySelector('#timein');
+var timeOut = document.querySelector('#timeout');
 
 var getRandomInteger = function (maxValue, minValue) {
   if (minValue === undefined) {
@@ -104,6 +106,8 @@ function getSeveralOffers(amount) {
   }
   return offers;
 }
+
+offers = getSeveralOffers(8);
 
 var createPin = function (offer) {
   var pin = template.cloneNode(true);
@@ -162,8 +166,6 @@ function createCard(offer) {
   fillPhotos(offer.offer.photos, cardPhotoContainer);
   document.querySelector('.map').insertBefore(card, document.querySelector('.map__filters-container'));
 }
-
-offers = getSeveralOffers(8);
 
 window.addEventListener('load', () => {
   Array.from(mapFilter.children).forEach(tag => tag.disabled = true);
@@ -235,15 +237,19 @@ typeSelect.addEventListener('change', () => {
   switch (typeSelect.value) {
     case 'bungalo':
       priceInput.minValue = 0;
+      priceInput.placeholder = "0";
       break;
       case 'flat':
       priceInput.minValue = 1000;
+      priceInput.placeholder = "1000";
       break;
       case 'house':
       priceInput.minValue = 5000;
+      priceInput.placeholder = "5000";
       break;
       case 'palace':
       priceInput.minValue = 10000;
+      priceInput.placeholder = "10000";
       break;
   }
 });
@@ -262,6 +268,20 @@ priceInput.addEventListener('invalid', () => {
   }
 });
 
+timeIn.addEventListener('change', () => {
+  switch (timeIn.value) {
+    case '12:00':
+      timeOut.selectedIndex = 0;
+      break;
+    case '13:00':
+      timeOut.selectedIndex = 1;
+      break;
+    case '14:00':
+      timeOut.selectedIndex = 2;
+      break;
+  }
+});
+
 roomSelect.addEventListener('input', selectRoomCapacityHandler);
 capacitySelect.addEventListener('input', selectRoomCapacityHandler);
 
@@ -272,4 +292,3 @@ mapForPins.addEventListener('click', evt => {
 
 fillOffers();
 console.log(pinsDictionary);
-createCard(offers[0]);
