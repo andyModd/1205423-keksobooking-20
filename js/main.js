@@ -60,12 +60,13 @@ var getRandomInteger = function (maxValue, minValue) {
 };
 
 var getRandomArray = function (array) {
+  var usedArray = array.slice();
   var shuffledArray = [];
-  var i = array.length;
-  var newLength = getRandomInteger(array.length) + 1;
+  var i = usedArray.length;
+  var newLength = getRandomInteger(usedArray.length) + 1;
   while (i--) {
     var r = getRandomInteger(i);
-    var removed = array.splice(r, 1);
+    var removed = usedArray.splice(r, 1);
     shuffledArray.push(removed[0]);
   }
   return shuffledArray.slice(0, newLength);
@@ -290,11 +291,18 @@ timeIn.addEventListener('change', function () {
 });
 
 roomSelect.addEventListener('input', selectRoomCapacityHandler);
-capacitySelect.addEventListener('input', selectRoomCapacityHandler);
 
+capacitySelect.addEventListener('input', selectRoomCapacityHandler);
+//Здесь несовсем правильно работает удаление карточки объявления
 mapForPins.addEventListener('click', function (evt) {
   var mapPin = evt.target.closest('.map__pin').outerHTML;
-  createCard(pinsDictionary[mapPin]);
+  if (map.contains(map.querySelector('.map__card'))) {
+    map.querySelector('.map__card').remove();
+    createCard(pinsDictionary[mapPin]);
+  } else {
+    createCard(pinsDictionary[mapPin]);
+  }
+
 });
 
 fillOffers();
