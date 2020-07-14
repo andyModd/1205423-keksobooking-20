@@ -23,24 +23,12 @@ var photos = [
 ];
 
 var offers = [];
-
 var pinsDictionary = {};
 var map = document.querySelector('.map');
 var mapForPins = map.querySelector('.map__pins');
 var btnMapPin = document.querySelector('.map__pin');
 var template = document.querySelector('#pin').content.querySelector('.map__pin');
 var templateCard = document.querySelector('#card').content.querySelector('.map__card');
-var card = templateCard.cloneNode(true);
-var cardTitle = card.querySelector('.popup__title');
-var cardAddress = card.querySelector('.popup__text--address');
-var cardPrice = card.querySelector('.popup__text--price');
-var cardFeatures = card.querySelector('.popup__features');
-var cardType = card.querySelector('.popup__type');
-var cardCapacity = card.querySelector('.popup__text--capacity');
-var cardTime = card.querySelector('.popup__text--time');
-var cardDescription = card.querySelector('.popup__description');
-var cardPhotoContainer = card.querySelector('.popup__photos');
-var cardPhoto = card.querySelector('.popup__photo');
 var adForm = document.querySelector('.ad-form');
 var mapFilter = document.querySelector('.map__filters');
 var capacitySelect = document.querySelector('#capacity');
@@ -113,6 +101,20 @@ var createPin = function (offer) {
   img.alt = offer['offer']['title'];
   pin.style.top = '' + offer['location']['y'] + 'px';
   pin.style.left = '' + offer['location']['x'] + 'px';
+// Обработчик показа карточки объявления при клике на пин
+  pin.addEventListener('click', function () {
+    if (map.contains(document.querySelector('.map__card'))){
+      map.querySelector('.map__card').remove();
+    }
+    openCard(offer);
+  });
+// Обработчик, убирающий карточку объявления при нажатии Escape
+  pin.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Escape') {
+      map.querySelector('.map__card').remove();
+    }
+  });
+
   return pin;
 };
 
@@ -120,38 +122,26 @@ var fillOffers = function () {
   var documentFragment = document.createDocumentFragment();
   for (var i = 0; i < offers.length; i++) {
     var createdPin = createPin(offers[i]);
-    var setting = createdPin.outerHTML;
-    pinsDictionary[setting] = offers[i];
     documentFragment.appendChild(createdPin);
   }
   mapForPins.appendChild(documentFragment);
 };
 
-function fillPhotos(offersPhotos, PhotoContainer) {
-  var amount = offersPhotos.length;
-  for (var i = 0; i < amount - 1; i++) {
-    PhotoContainer.appendChild(cardPhoto.cloneNode(true));
-  }
-  var currentCardPhotos = PhotoContainer.querySelectorAll('.popup__photo');
-  for (var j = 0; j < offersPhotos.length; j++) {
-    currentCardPhotos[j].src = offersPhotos[j];
-  }
-}
+function openCard(offer) {
+  var card = templateCard.cloneNode(true);
+  var cardAvatar = card.querySelector('.popup__avatar');
+  var cardTitle = card.querySelector('.popup__title');
+  var cardAddress = card.querySelector('.popup__text--address');
+  var cardPrice = card.querySelector('.popup__text--price');
+  var cardFeatures = card.querySelector('.popup__features');
+  var cardType = card.querySelector('.popup__type');
+  var cardCapacity = card.querySelector('.popup__text--capacity');
+  var cardTime = card.querySelector('.popup__text--time');
+  var cardDescription = card.querySelector('.popup__description');
+  var cardPhotoContainer = card.querySelector('.popup__photos');
+  var cardPhoto = card.querySelector('.popup__photo');
 
-function fillFeatures(offersFeatures) {
-  for (var i = 0; i < offersFeatures.length; i++) {
-    cardFeatures.querySelector('.popup__feature--' + offersFeatures[i]).textContent = offersFeatures[i];
-  }
-
-  var currentCardFeatures = cardFeatures.querySelectorAll('.popup__feature');
-  for (var j = 0; j < currentCardFeatures.length; j++) {
-    if (currentCardFeatures[j].childNodes.length === 0) {
-      cardFeatures.removeChild(currentCardFeatures[j]);
-    }
-  }
-}
-
-function createCard(offer) {
+  cardAvatar.src = offer.author.avatar;
   cardAddress.textContent = offer.offer.address;
   cardTitle.textContent = offer.offer.title;
   cardPrice.textContent = offer.offer.price + ' ₽/ночь.';
@@ -162,6 +152,32 @@ function createCard(offer) {
   fillFeatures(offer.offer.features);
   fillPhotos(offer.offer.photos, cardPhotoContainer);
   document.querySelector('.map').insertBefore(card, document.querySelector('.map__filters-container'));
+
+  function fillPhotos(offersPhotos, photoContainer) {
+    photoContainer.innerHTML = '';
+    for (var i = 0; i < offersPhotos.length; i++) {
+      var photoImage = cardPhoto.cloneNode(true);
+      photoImage.src = offersPhotos[i];
+      photoContainer.appendChild(photoImage);
+    }
+
+    card.querySelector('.popup__close').addEventListener('click', function () {
+
+      card.remove();
+    });
+  }
+
+  function fillFeatures(offersFeatures) {
+    for (var i = 0; i < offersFeatures.length; i++) {
+      cardFeatures.querySelector('.popup__feature--' + offersFeatures[i]).textContent = offersFeatures[i];
+    }
+    var currentCardFeatures = cardFeatures.querySelectorAll('.popup__feature');
+    for (var j = 0; j < currentCardFeatures.length; j++) {
+      if (currentCardFeatures[j].childNodes.length === 0) {
+        cardFeatures.removeChild(currentCardFeatures[j]);
+      }
+    }
+  }
 }
 
 window.addEventListener('load', function () {
@@ -224,7 +240,7 @@ function selectRoomCapacityHandler() {
   }
 }
 
-offerTitle.addEventListener('invalid', function () {
+offerTitle.addEventListener('input', function () {
   switch (true) {
     case offerTitle.validity.tooShort:
       offerTitle.setCustomValidity('Заголовок объявления должен состоять минимум из 30-ти символов');
@@ -290,19 +306,25 @@ timeIn.addEventListener('change', function () {
   }
 });
 
+timeOut.addEventListener('change', function () {
+  switch (timeOut.value) {
+    case '12:00':
+      timeIn.selectedIndex = 0;
+      break;
+    case '13:00':
+      timeIn.selectedIndex = 1;
+      break;
+    case '14:00':
+      timeIn.selectedIndex = 2;
+      break;
+  }
+});
+
 roomSelect.addEventListener('input', selectRoomCapacityHandler);
 
 capacitySelect.addEventListener('input', selectRoomCapacityHandler);
-//Здесь несовсем правильно работает удаление карточки объявления
-mapForPins.addEventListener('click', function (evt) {
-  var mapPin = evt.target.closest('.map__pin').outerHTML;
-  if (map.contains(map.querySelector('.map__card'))) {
-    map.querySelector('.map__card').remove();
-    createCard(pinsDictionary[mapPin]);
-  } else {
-    createCard(pinsDictionary[mapPin]);
-  }
-
-});
 
 fillOffers();
+
+
+
