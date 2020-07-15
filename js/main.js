@@ -23,7 +23,6 @@ var photos = [
 ];
 
 var offers = [];
-var pinsDictionary = {};
 var map = document.querySelector('.map');
 var mapForPins = map.querySelector('.map__pins');
 var btnMapPin = document.querySelector('.map__pin');
@@ -101,14 +100,14 @@ var createPin = function (offer) {
   img.alt = offer['offer']['title'];
   pin.style.top = '' + offer['location']['y'] + 'px';
   pin.style.left = '' + offer['location']['x'] + 'px';
-// Обработчик показа карточки объявления при клике на пин
+  // Обработчик показа карточки объявления при клике на пин
   pin.addEventListener('click', function () {
-    if (map.contains(document.querySelector('.map__card'))){
+    if (map.contains(document.querySelector('.map__card'))) {
       map.querySelector('.map__card').remove();
     }
     openCard(offer);
   });
-// Обработчик, убирающий карточку объявления при нажатии Escape
+  // Обработчик, убирающий карточку объявления при нажатии Escape
   pin.addEventListener('keydown', function (evt) {
     if (evt.key === 'Escape') {
       map.querySelector('.map__card').remove();
@@ -162,7 +161,6 @@ function openCard(offer) {
     }
 
     card.querySelector('.popup__close').addEventListener('click', function () {
-
       card.remove();
     });
   }
@@ -325,6 +323,3 @@ roomSelect.addEventListener('input', selectRoomCapacityHandler);
 capacitySelect.addEventListener('input', selectRoomCapacityHandler);
 
 fillOffers();
-
-
-
