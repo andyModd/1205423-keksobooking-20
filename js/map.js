@@ -11,5 +11,8 @@
     }
     mapForPins.appendChild(documentFragment);
   };
-  fillOffers();
+
+  window.map = {
+    fillOffers: fillOffers
+  };
 })();

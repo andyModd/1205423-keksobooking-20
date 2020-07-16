@@ -27,6 +27,7 @@
         tag.disabled = false;
       });
       document.querySelector('#address').value = Math.floor(btnMapPin.offsetLeft + btnMapPin.offsetHeight + 10) + ', ' + Math.floor(btnMapPin.offsetTop + btnMapPin.offsetWidth + 22);
+      window.map.fillOffers();
     }
   });
 
@@ -41,6 +42,7 @@
         tag.disabled = false;
       });
       document.querySelector('#address').value = Math.floor(btnMapPin.offsetLeft + btnMapPin.offsetHeight + 10) + ', ' + Math.floor(btnMapPin.offsetTop + btnMapPin.offsetWidth + 22);
+      window.map.fillOffers();
     }
   });
 })();
