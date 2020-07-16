@@ -55,5 +55,5 @@
 
   window.card = {
     createCard: createCard
-  }
+  };
 })();

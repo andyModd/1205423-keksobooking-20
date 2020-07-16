@@ -1,3 +1,4 @@
+'use strict';
 (function () {
   var map = document.querySelector('.map');
   var mapForPins = map.querySelector('.map__pins');
