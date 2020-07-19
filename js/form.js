@@ -1,5 +1,11 @@
 'use strict';
 (function () {
+  var MAIN_ACTIVE_PIN_HEIGHT = 77;
+
+  var map = document.querySelector('.map');
+  var mainPin = document.querySelector('.map__pin--main');
+  var adForm = document.querySelector('.ad-form');
+  var mapFilter = document.querySelector('.map__filters');
   var capacitySelect = document.querySelector('#capacity');
   var roomSelect = document.querySelector('#room_number');
   var offerTitle = document.querySelector('#title');
@@ -7,8 +13,25 @@
   var typeSelect = document.querySelector('#type');
   var timeIn = document.querySelector('#timein');
   var timeOut = document.querySelector('#timeout');
+  var addressInput = document.querySelector('#address');
 
-  function selectRoomCapacityHandler() {
+  var toggleStateOfForm = function (elements, isActive) {
+    isActive ? elements.forEach(function (element) { element.disabled = false; }) : elements.forEach(function (element) { element.disabled = true; });
+  };
+
+  var setInactiveAddress = function () {
+    var CoordinateX = Math.round(mainPin.offsetLeft + mainPin.offsetWidth / 2);
+    var CoordinateY = Math.round(mainPin.offsetTop + mainPin.offsetHeight / 2);
+    addressInput.value = CoordinateX + ', ' + CoordinateY;
+  }
+
+  var setActiveAddress = function () {
+    var CoordinateX = Math.round(mainPin.offsetLeft + mainPin.offsetWidth / 2);
+    var CoordinateY = Math.round(mainPin.offsetTop + MAIN_ACTIVE_PIN_HEIGHT);
+    addressInput.value = CoordinateX + ', ' + CoordinateY;
+  }
+
+  var selectRoomCapacityHandler = function () {
     switch (true) {
       case (roomSelect.value === '100' && capacitySelect.value !== '0'):
         roomSelect.setCustomValidity('Для выбранного количества комнат размещение гостей невозможно');
@@ -112,4 +135,10 @@
   roomSelect.addEventListener('input', selectRoomCapacityHandler);
 
   capacitySelect.addEventListener('input', selectRoomCapacityHandler);
+
+  window.form = {
+    toggleStateOfForm: toggleStateOfForm,
+    setInactiveAddress: setInactiveAddress,
+    setActiveAddress: setActiveAddress
+  }
 })();

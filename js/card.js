@@ -1,7 +1,7 @@
 'use strict';
 (function () {
 
-  function createCard(offer) {
+  var createCard = function (offer) {
     var templateCard = document.querySelector('#card').content.querySelector('.map__card');
     var card = templateCard.cloneNode(true);
     var cardAvatar = card.querySelector('.popup__avatar');
@@ -16,7 +16,7 @@
     var cardPhotoContainer = card.querySelector('.popup__photos');
     var cardPhoto = card.querySelector('.popup__photo');
 
-    function fillPhotos(offersPhotos, photoContainer) {
+    var fillPhotos = function (offersPhotos, photoContainer) {
       photoContainer.innerHTML = '';
       for (var i = 0; i < offersPhotos.length; i++) {
         var photoImage = cardPhoto.cloneNode(true);
@@ -26,9 +26,9 @@
       card.querySelector('.popup__close').addEventListener('click', function () {
         card.remove();
       });
-    }
+    };
 
-    function fillFeatures(offersFeatures) {
+    var fillFeatures = function (offersFeatures) {
       for (var i = 0; i < offersFeatures.length; i++) {
         cardFeatures.querySelector('.popup__feature--' + offersFeatures[i]).textContent = offersFeatures[i];
       }
@@ -38,7 +38,7 @@
           cardFeatures.removeChild(currentCardFeatures[j]);
         }
       }
-    }
+    };
 
     cardAvatar.src = offer.author.avatar;
     cardAddress.textContent = offer.offer.address;
@@ -51,7 +51,7 @@
     fillFeatures(offer.offer.features);
     fillPhotos(offer.offer.photos, cardPhotoContainer);
     document.querySelector('.map').insertBefore(card, document.querySelector('.map__filters-container'));
-  }
+  };
 
   window.card = {
     createCard: createCard

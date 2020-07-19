@@ -69,7 +69,7 @@
     return offer;
   };
 
-  function getSeveralOffers(amount) {
+  var getSeveralOffers = function (amount) {
     var localOffers = [];
     for (var i = 0; i < amount; i++) {
       localOffers.push(getRandomOffer(features, photos));
