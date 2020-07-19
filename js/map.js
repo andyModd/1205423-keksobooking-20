@@ -2,7 +2,6 @@
 (function () {
   var map = document.querySelector('.map');
   var mapForPins = map.querySelector('.map__pins');
-  var map = document.querySelector('.map');
   var mainPin = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var fieldsets = document.querySelectorAll('fieldset');
@@ -35,42 +34,8 @@
   };
 
   var onPinMouseDown = function (evt) {
-    evt.preventDefault();
-
     if (evt.which === 1) {
       enableMap();
-
-      var startCoords = {
-        x: evt.clientX,
-        y: evt.clientY
-      };
-
-      var onMouseMove = function (moveEvt) {
-        moveEvt.preventDefault();
-        console.log(1);
-        var shift = {
-          x: startCoords.x - moveEvt.clientX,
-          y: startCoords.y - moveEvt.clientY
-        };
-
-        startCoords = {
-          x: moveEvt.clientX,
-          y: moveEvt.clientY
-        };
-
-        mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
-        mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
-
-        var onMouseUp = function (upEvt) {
-          upEvt.preventDefault();
-
-          document.removeEventListener('mousemove', onMouseMove);
-          document.removeEventListener('mouseup', onMouseUp);
-        };
-
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-      };
     }
   };
 

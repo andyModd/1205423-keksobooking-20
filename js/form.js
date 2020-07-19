@@ -2,10 +2,10 @@
 (function () {
   var MAIN_ACTIVE_PIN_HEIGHT = 77;
 
-  var map = document.querySelector('.map');
+  // var map = document.querySelector('.map');
   var mainPin = document.querySelector('.map__pin--main');
-  var adForm = document.querySelector('.ad-form');
-  var mapFilter = document.querySelector('.map__filters');
+  // var adForm = document.querySelector('.ad-form');
+  // var mapFilter = document.querySelector('.map__filters');
   var capacitySelect = document.querySelector('#capacity');
   var roomSelect = document.querySelector('#room_number');
   var offerTitle = document.querySelector('#title');
@@ -16,20 +16,28 @@
   var addressInput = document.querySelector('#address');
 
   var toggleStateOfForm = function (elements, isActive) {
-    isActive ? elements.forEach(function (element) { element.disabled = false; }) : elements.forEach(function (element) { element.disabled = true; });
+    if (isActive) {
+      elements.forEach(function (element) {
+        element.disabled = false;
+      });
+    } else {
+      elements.forEach(function (element) {
+        element.disabled = true;
+      });
+    }
   };
 
   var setInactiveAddress = function () {
     var CoordinateX = Math.round(mainPin.offsetLeft + mainPin.offsetWidth / 2);
     var CoordinateY = Math.round(mainPin.offsetTop + mainPin.offsetHeight / 2);
     addressInput.value = CoordinateX + ', ' + CoordinateY;
-  }
+  };
 
   var setActiveAddress = function () {
     var CoordinateX = Math.round(mainPin.offsetLeft + mainPin.offsetWidth / 2);
     var CoordinateY = Math.round(mainPin.offsetTop + MAIN_ACTIVE_PIN_HEIGHT);
     addressInput.value = CoordinateX + ', ' + CoordinateY;
-  }
+  };
 
   var selectRoomCapacityHandler = function () {
     switch (true) {
@@ -50,7 +58,7 @@
         capacitySelect.setCustomValidity('');
         break;
     }
-  }
+  };
 
   offerTitle.addEventListener('input', function () {
     switch (true) {
@@ -137,8 +145,9 @@
   capacitySelect.addEventListener('input', selectRoomCapacityHandler);
 
   window.form = {
+    mainActivePinHeight: MAIN_ACTIVE_PIN_HEIGHT,
     toggleStateOfForm: toggleStateOfForm,
     setInactiveAddress: setInactiveAddress,
     setActiveAddress: setActiveAddress
-  }
+  };
 })();

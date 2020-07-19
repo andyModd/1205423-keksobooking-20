@@ -1,5 +1,9 @@
 'use strict';
 (function () {
+  var Y_MIN = 130;
+  var Y_MAX = 630;
+  var X_MIN = 0;
+  var X_MAX = 1200;
   var hours = ['12:00', '13:00', '14:00'];
   var types = ['palace', 'flat', 'house', 'bungalo'];
   var typesObj = {
@@ -75,11 +79,15 @@
       localOffers.push(getRandomOffer(features, photos));
     }
     return localOffers;
-  }
+  };
 
   offers = getSeveralOffers(8);
 
   window.data = {
+    xMin: X_MIN,
+    xMax: X_MAX,
+    yMin: Y_MIN,
+    yMax: Y_MAX,
     photos: photos,
     features: features,
     typesObj: typesObj,
