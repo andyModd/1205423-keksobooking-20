@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var TIMEOUT_IN_MS = 10000;
+
   var load = function (url, onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -18,7 +20,7 @@
     xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
-    xhr.timeout = 10000;
+    xhr.timeout = TIMEOUT_IN_MS;
     xhr.open('GET', url);
     xhr.send();
   };
