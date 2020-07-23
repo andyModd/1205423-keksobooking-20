@@ -26,9 +26,9 @@
   var renderOfferPins = function (offers) {
     clearOfferPins();
     var documentFragment = document.createDocumentFragment();
-      offers.forEach(function (offer) {
-        documentFragment.appendChild(window.pin.createPin(offer));
-      });
+    offers.forEach(function (offer) {
+      documentFragment.appendChild(window.pin.createPin(offer));
+    });
     mapForPins.appendChild(documentFragment);
   };
 
@@ -55,7 +55,7 @@
     window.form.setActiveAddress();
     mainPin.removeEventListener('mousedown', onPinMouseDown);
     mainPin.removeEventListener('keydown', onPinPress);
-    window.backend.load('https://javascript.pages.academy/keksobooking/data', renderOfferPins);
+    window.backend.load(window.constants.url, renderOfferPins);
   };
 
   var onPinMouseDown = function (evt) {
@@ -74,13 +74,13 @@
     if (evt.key === 'Escape') {
       closeOfferCard();
     }
-  }
+  };
 
   var onCardMouseDown = function (evt) {
     if (evt.which === 1) {
       closeOfferCard();
     }
-  }
+  };
 
   window.map = {
     renderOfferPins: renderOfferPins,
