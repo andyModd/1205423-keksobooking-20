@@ -1,12 +1,14 @@
 'use strict';
 (function () {
   var mainPin = document.querySelector('.map__pin--main');
+
   var mapEdges = {
-    top: window.data.yMin - window.form.mainActivePinHeight,
-    bottom: window.data.yMax - window.form.mainActivePinHeight,
-    left: window.data.xMin - Math.ceil(mainPin.offsetWidth / 2),
-    right: window.data.xMax - Math.ceil(mainPin.offsetWidth / 2)
+    top: window.constants.yMin - window.constants.mainActivePinHeight,
+    bottom: window.constants.yMax - window.constants.mainActivePinHeight,
+    left: window.constants.xMin - Math.ceil(mainPin.offsetWidth / 2),
+    right: window.constants.xMax - Math.ceil(mainPin.offsetWidth / 2)
   };
+
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 

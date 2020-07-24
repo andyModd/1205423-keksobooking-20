@@ -1,11 +1,6 @@
 'use strict';
 (function () {
-  var MAIN_ACTIVE_PIN_HEIGHT = 77;
-
-  // var map = document.querySelector('.map');
   var mainPin = document.querySelector('.map__pin--main');
-  // var adForm = document.querySelector('.ad-form');
-  // var mapFilter = document.querySelector('.map__filters');
   var capacitySelect = document.querySelector('#capacity');
   var roomSelect = document.querySelector('#room_number');
   var offerTitle = document.querySelector('#title');
@@ -35,7 +30,7 @@
 
   var setActiveAddress = function () {
     var CoordinateX = Math.round(mainPin.offsetLeft + mainPin.offsetWidth / 2);
-    var CoordinateY = Math.round(mainPin.offsetTop + MAIN_ACTIVE_PIN_HEIGHT);
+    var CoordinateY = Math.round(mainPin.offsetTop + window.constants.mainActivePinHeight);
     addressInput.value = CoordinateX + ', ' + CoordinateY;
   };
 
@@ -145,7 +140,6 @@
   capacitySelect.addEventListener('input', selectRoomCapacityHandler);
 
   window.form = {
-    mainActivePinHeight: MAIN_ACTIVE_PIN_HEIGHT,
     toggleStateOfForm: toggleStateOfForm,
     setInactiveAddress: setInactiveAddress,
     setActiveAddress: setActiveAddress

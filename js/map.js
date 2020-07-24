@@ -6,13 +6,37 @@
   var adForm = document.querySelector('.ad-form');
   var fieldsets = document.querySelectorAll('fieldset');
 
-  var fillOffers = function () {
-    var documentFragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.offers.length; i++) {
-      var createdPin = window.pin.createPin(window.data.offers[i]);
-      documentFragment.appendChild(createdPin);
+  var closeOfferCard = function () {
+    var offerCard = map.querySelector('.map__card');
+    var activePin = map.querySelector('.map__pin--active');
+    if (offerCard) {
+      offerCard.remove();
+      activePin.classList.remove('map__pin--active');
+      document.removeEventListener('keydown', onEscPress);
+      offerCard.removeEventListener('click', onCardMouseDown);
     }
+  };
+
+  var openOfferCard = function (offer) {
+    var offerCard = window.card.createCard(offer);
+    document.querySelector('.map').insertBefore(offerCard, document.querySelector('.map__filters-container'));
+    offerCard.querySelector('.popup__close').addEventListener('click', onCardMouseDown);
+  };
+
+  var renderOfferPins = function (offers) {
+    clearOfferPins();
+    var documentFragment = document.createDocumentFragment();
+    offers.forEach(function (offer) {
+      documentFragment.appendChild(window.pin.createPin(offer));
+    });
     mapForPins.appendChild(documentFragment);
+  };
+
+  var clearOfferPins = function () {
+    var filledOffers = map.querySelectorAll('.map__pin:not(.map__pin--main');
+    filledOffers.forEach(function (offer) {
+      offer.remove();
+    });
   };
 
   var disableMap = function () {
@@ -31,6 +55,7 @@
     window.form.setActiveAddress();
     mainPin.removeEventListener('mousedown', onPinMouseDown);
     mainPin.removeEventListener('keydown', onPinPress);
+    window.backend.load(window.constants.url, renderOfferPins);
   };
 
   var onPinMouseDown = function (evt) {
@@ -45,8 +70,24 @@
     }
   };
 
+  var onEscPress = function (evt) {
+    if (evt.key === 'Escape') {
+      closeOfferCard();
+    }
+  };
+
+  var onCardMouseDown = function (evt) {
+    if (evt.which === 1) {
+      closeOfferCard();
+    }
+  };
+
   window.map = {
-    fillOffers: fillOffers,
+    renderOfferPins: renderOfferPins,
+    openOfferCard: openOfferCard,
+    closeOfferCard: closeOfferCard,
+    onCardMouseDown: onCardMouseDown,
+    onEscPress: onEscPress,
     disableMap: disableMap,
     enableMap: enableMap
   };
