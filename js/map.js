@@ -43,6 +43,11 @@
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     window.form.toggleStateOfForm(fieldsets, false);
+    closeOfferCard();
+    clearOfferPins();
+    adForm.reset();
+    mainPin.style.top = window.constants.pinStartCoordY;
+    mainPin.style.left = window.constants.pinStartCoordX;
     window.form.setInactiveAddress();
     mainPin.addEventListener('mousedown', onPinMouseDown);
     mainPin.addEventListener('keydown', onPinPress);
@@ -55,7 +60,7 @@
     window.form.setActiveAddress();
     mainPin.removeEventListener('mousedown', onPinMouseDown);
     mainPin.removeEventListener('keydown', onPinPress);
-    window.backend.load(window.constants.url, renderOfferPins);
+    window.backend.load(window.constants.urlGet, window.constants.requestGet, renderOfferPins);
   };
 
   var onPinMouseDown = function (evt) {

@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var load = function (url, onSuccess, onError) {
+  var load = function (url, type, onSuccess, onError, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.addEventListener('load', function () {
@@ -19,11 +19,16 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
     xhr.timeout = window.constants.timeoutInMs;
-    xhr.open('GET', url);
-    xhr.send();
+    xhr.open(type, url);
+    xhr.send(data);
+  };
+
+  var upload = function (data, onSuccess, onError) {
+    load(window.constants.urlPost, window.constants.requestPost, onSuccess, onError, data);
   };
 
   window.backend = {
-    load: load
+    load: load,
+    upload: upload
   };
 })();
