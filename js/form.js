@@ -9,8 +9,6 @@
   var timeIn = document.querySelector('#timein');
   var timeOut = document.querySelector('#timeout');
   var addressInput = document.querySelector('#address');
-  var adForm = document.querySelector('.ad-form');
-  var resetButton = adForm.querySelector('.ad-form__reset');
 
   var toggleStateOfForm = function (elements, isActive) {
     if (isActive) {
@@ -56,76 +54,6 @@
         break;
     }
   };
-
-  var onSuccessMessageEscPress = function (evt) {
-    if (evt.key === 'Escape') {
-      removeSuccessMessage();
-    }
-  };
-
-  var onWindowSuccessMessageClick = function (evt) {
-    if (evt.target.matches('.success')) {
-      removeSuccessMessage();
-    }
-  };
-
-  var removeSuccessMessage = function () {
-    document.querySelector('.success').remove();
-  };
-
-  var onSuccessMessage = function () {
-    var successfullMessage = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
-    document.querySelector('main').appendChild(successfullMessage);
-    document.addEventListener('keydown', onSuccessMessageEscPress);
-    document.addEventListener('click', onWindowSuccessMessageClick);
-  };
-
-  var removeUnsuccessfullMessage = function () {
-    document.querySelector('.error').remove();
-  };
-
-  var onErrorButtonClick = function () {
-    removeUnsuccessfullMessage();
-  };
-
-  var onUnSuccessfullMessageEscPress = function (evt) {
-    if (evt.key === 'Escape') {
-      removeUnsuccessfullMessage();
-    }
-  };
-
-  var onWindowUnsuccessfullMessageClick = function (evt) {
-    if (evt.target.matches('.error')) {
-      removeUnsuccessfullMessage();
-    }
-  };
-
-  var onUnsuccessfullMessage = function (errorMessage) {
-    var unSuccessfullMessage = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
-    var messageText = unSuccessfullMessage.querySelector('.error__message');
-    messageText.textContent = errorMessage;
-
-    document.querySelector('main').appendChild(unSuccessfullMessage);
-
-    var errorButton = unSuccessfullMessage.querySelector('.error__button');
-    errorButton.addEventListener('click', onErrorButtonClick);
-    document.addEventListener('keydown', onUnSuccessfullMessageEscPress);
-    document.addEventListener('click', onWindowUnsuccessfullMessageClick);
-  };
-
-  var onSubmit = function (evt) {
-    window.backend.upload(new FormData(adForm), onSuccessMessage, onUnsuccessfullMessage);
-    window.map.disableMap();
-    evt.preventDefault();
-  };
-
-  var onResetButtonClick = function (evt) {
-    evt.preventDefault();
-    window.map.disableMap();
-  };
-
-  adForm.addEventListener('submit', onSubmit);
-  resetButton.addEventListener('click', onResetButtonClick);
 
   offerTitle.addEventListener('input', function () {
     switch (true) {

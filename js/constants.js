@@ -20,6 +20,9 @@
   var REQUEST_POST = 'POST';
   var TIMEOUT_IN_MS = 10000;
 
+  var OFFER_AMOUNT = 5;
+  var FILTER_DEFAULT_VALUE = 'any';
+
   window.constants = {
     xMin: X_MIN,
     xMax: X_MAX,
@@ -35,6 +38,8 @@
     urlPost: URL_POST,
     requestGet: REQUEST_GET,
     requestPost: REQUEST_POST,
-    timeoutInMs: TIMEOUT_IN_MS
+    timeoutInMs: TIMEOUT_IN_MS,
+    offerAmount: OFFER_AMOUNT,
+    filterDefaultValue: FILTER_DEFAULT_VALUE,
   };
 })();
