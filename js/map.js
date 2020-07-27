@@ -6,6 +6,7 @@
   var adForm = document.querySelector('.ad-form');
   var resetButton = adForm.querySelector('.ad-form__reset');
   var mapFiltersForm = document.querySelector('.map__filters');
+  var mapFiltersFormTags = document.querySelectorAll('input, select, fieldset');
   var fieldsets = document.querySelectorAll('fieldset');
 
   var closeOfferCard = function () {
@@ -108,13 +109,13 @@
 
   var onSubmit = function (evt) {
     window.backend.upload(new FormData(adForm), onSuccessMessage, onUnsuccessfullMessage);
-    window.map.disableMap();
+    window.map.disableActiveMode();
     evt.preventDefault();
   };
 
   var onResetButtonClick = function (evt) {
     evt.preventDefault();
-    window.map.disableMap();
+    window.map.disableActiveMode();
   };
 
   adForm.addEventListener('submit', onSubmit);
@@ -124,10 +125,12 @@
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     window.form.toggleState(fieldsets, false);
+    window.form.toggleState(mapFiltersFormTags, false);
     closeOfferCard();
     clearOfferPins();
     adForm.reset();
     mapFiltersForm.reset();
+    mapFiltersForm.classList.add('hidden');
     mainPin.style.top = window.constants.pinStartCoordY;
     mainPin.style.left = window.constants.pinStartCoordX;
     window.form.setInactiveAddress();
@@ -139,6 +142,8 @@
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
     window.form.toggleState(fieldsets, true);
+    window.form.toggleState(mapFiltersFormTags, true);
+    mapFiltersForm.classList.remove('hidden');
     window.form.setActiveAddress();
     mainPin.removeEventListener('mousedown', onPinMouseDown);
     mainPin.removeEventListener('keydown', onPinPress);
@@ -173,6 +178,7 @@
     renderOfferPins: renderOfferPins,
     openOfferCard: openOfferCard,
     closeOfferCard: closeOfferCard,
+    clearOfferPins: clearOfferPins,
     onCardMouseDown: onCardMouseDown,
     onEscPress: onEscPress,
     disableActiveMode: disableActiveMode,

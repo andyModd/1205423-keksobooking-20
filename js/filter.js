@@ -7,13 +7,6 @@
   var guestsSelect = mapFiltersForm.querySelector('#housing-guests');
   var featuresChoice = mapFiltersForm.querySelector('#housing-features');
 
-  mapFiltersForm.addEventListener('change', function () {
-    window.debounce(function () {
-      window.map.renderOfferPins(toFilter(window.offers));
-      window.map.closeOfferCard();
-    })();
-  });
-
   var checkByType = function (element) {
     return housingTypeSelect.value === element.offer.type || housingTypeSelect.value === window.constants.filterDefaultValue;
   };
@@ -57,4 +50,12 @@
       return checkByType(offer) && checkByRooms(offer) && checkByPrice(offer) && checkByGuests(offer) && checkByFeatures(offer);
     });
   };
+
+  mapFiltersForm.addEventListener('change', function () {
+    window.debounce(function () {
+      window.map.closeOfferCard();
+      window.map.clearOfferPins();
+      window.map.renderOfferPins(toFilter(window.offers));
+    })();
+  });
 })();

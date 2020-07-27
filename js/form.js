@@ -116,13 +116,13 @@
 
   var onSubmit = function (evt) {
     window.backend.upload(new FormData(adForm), onSuccessMessage, onUnsuccessfullMessage);
-    window.map.disableMap();
+    window.map.disableActiveMode();
     evt.preventDefault();
   };
 
   var onResetButtonClick = function (evt) {
     evt.preventDefault();
-    window.map.disableMap();
+    window.map.disableActiveMode();
   };
 
   adForm.addEventListener('submit', onSubmit);
