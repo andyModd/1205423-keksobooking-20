@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var templateCard = document.querySelector('#card').content.querySelector('.map__card');
+
   var roomTypes = {
     'palace': 'Дворец',
     'flat': 'Квартира',
@@ -72,7 +74,6 @@
   };
 
   var createCard = function (offer) {
-    var templateCard = document.querySelector('#card').content.querySelector('.map__card');
     var card = templateCard.cloneNode(true);
     var closeButton = card.querySelector('.popup__close');
     var cardAvatar = card.querySelector('.popup__avatar');
@@ -122,6 +123,6 @@
   };
 
   window.card = {
-    createCard: createCard
+    create: createCard
   };
 })();

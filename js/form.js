@@ -1,5 +1,8 @@
 'use strict';
 (function () {
+  var successfullMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+  var unsuccessfullMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+  var main = document.querySelector('main');
   var mainPin = document.querySelector('.map__pin--main');
   var capacitySelect = document.querySelector('#capacity');
   var roomSelect = document.querySelector('#room_number');
@@ -25,15 +28,15 @@
   };
 
   var setInactiveAddress = function () {
-    var CoordinateX = Math.round(mainPin.offsetLeft + mainPin.offsetWidth / 2);
-    var CoordinateY = Math.round(mainPin.offsetTop + mainPin.offsetHeight / 2);
-    addressInput.value = CoordinateX + ', ' + CoordinateY;
+    var coordinateX = Math.round(mainPin.offsetLeft + mainPin.offsetWidth / 2);
+    var coordinateY = Math.round(mainPin.offsetTop + mainPin.offsetHeight / 2);
+    addressInput.value = coordinateX + ', ' + coordinateY;
   };
 
   var setActiveAddress = function () {
-    var CoordinateX = Math.round(mainPin.offsetLeft + mainPin.offsetWidth / 2);
-    var CoordinateY = Math.round(mainPin.offsetTop + window.constants.mainActivePinHeight);
-    addressInput.value = CoordinateX + ', ' + CoordinateY;
+    var coordinateX = Math.round(mainPin.offsetLeft + mainPin.offsetWidth / 2);
+    var coordinateY = Math.round(mainPin.offsetTop + window.constants.mainActivePinHeight);
+    addressInput.value = coordinateX + ', ' + coordinateY;
   };
 
   var onSelectRoomCapacity = function () {
@@ -74,8 +77,8 @@
   };
 
   var onSuccessMessage = function () {
-    var successfullMessage = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
-    document.querySelector('main').appendChild(successfullMessage);
+    var successfullMessage = successfullMessageTemplate.cloneNode(true);
+    main.appendChild(successfullMessage);
     document.addEventListener('keydown', onSuccessMessageEscPress);
     document.addEventListener('click', onWindowSuccessMessageClick);
   };
@@ -101,12 +104,10 @@
   };
 
   var onUnsuccessfullMessage = function (errorMessage) {
-    var unSuccessfullMessage = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+    var unSuccessfullMessage = unsuccessfullMessageTemplate.cloneNode(true);
     var messageText = unSuccessfullMessage.querySelector('.error__message');
     messageText.textContent = errorMessage;
-
-    document.querySelector('main').appendChild(unSuccessfullMessage);
-
+    main.appendChild(unSuccessfullMessage);
     var errorButton = unSuccessfullMessage.querySelector('.error__button');
     errorButton.addEventListener('click', onErrorButtonClick);
     document.addEventListener('keydown', onUnSuccessfullMessageEscPress);
@@ -180,31 +181,11 @@
   });
 
   timeIn.addEventListener('change', function () {
-    switch (timeIn.value) {
-      case '12:00':
-        timeOut.selectedIndex = 0;
-        break;
-      case '13:00':
-        timeOut.selectedIndex = 1;
-        break;
-      case '14:00':
-        timeOut.selectedIndex = 2;
-        break;
-    }
+    timeOut.value = timeIn.value;
   });
 
   timeOut.addEventListener('change', function () {
-    switch (timeOut.value) {
-      case '12:00':
-        timeIn.selectedIndex = 0;
-        break;
-      case '13:00':
-        timeIn.selectedIndex = 1;
-        break;
-      case '14:00':
-        timeIn.selectedIndex = 2;
-        break;
-    }
+    timeIn.value = timeOut.value;
   });
 
   roomSelect.addEventListener('input', onSelectRoomCapacity);
@@ -212,7 +193,7 @@
   capacitySelect.addEventListener('input', onSelectRoomCapacity);
 
   window.form = {
-    toggleStateOfForm: toggleStateOfForm,
+    toggleState: toggleStateOfForm,
     setInactiveAddress: setInactiveAddress,
     setActiveAddress: setActiveAddress
   };

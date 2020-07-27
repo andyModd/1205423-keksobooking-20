@@ -5,6 +5,7 @@
   var mainPin = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var resetButton = adForm.querySelector('.ad-form__reset');
+  var mapFiltersForm = document.querySelector('.map__filters');
   var fieldsets = document.querySelectorAll('fieldset');
 
   var closeOfferCard = function () {
@@ -13,14 +14,13 @@
     if (offerCard) {
       offerCard.remove();
       activePin.classList.remove('map__pin--active');
-      document.removeEventListener('keydown', onEscPress);
-      offerCard.removeEventListener('click', onCardMouseDown);
     }
+    document.removeEventListener('keydown', onEscPress);
   };
 
   var openOfferCard = function (offer) {
-    var offerCard = window.card.createCard(offer);
-    document.querySelector('.map').insertBefore(offerCard, document.querySelector('.map__filters-container'));
+    var offerCard = window.card.create(offer);
+    map.insertBefore(offerCard, document.querySelector('.map__filters-container'));
     offerCard.querySelector('.popup__close').addEventListener('click', onCardMouseDown);
   };
 
@@ -28,7 +28,7 @@
     clearOfferPins();
     var documentFragment = document.createDocumentFragment();
     offers.slice(0, window.constants.offerAmount).forEach(function (offer) {
-      documentFragment.appendChild(window.pin.createPin(offer));
+      documentFragment.appendChild(window.pin.create(offer));
     });
     mapForPins.appendChild(documentFragment);
   };
@@ -120,13 +120,14 @@
   adForm.addEventListener('submit', onSubmit);
   resetButton.addEventListener('click', onResetButtonClick);
 
-  var disableMap = function () {
+  var disableActiveMode = function () {
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
-    window.form.toggleStateOfForm(fieldsets, false);
+    window.form.toggleState(fieldsets, false);
     closeOfferCard();
     clearOfferPins();
     adForm.reset();
+    mapFiltersForm.reset();
     mainPin.style.top = window.constants.pinStartCoordY;
     mainPin.style.left = window.constants.pinStartCoordX;
     window.form.setInactiveAddress();
@@ -134,10 +135,10 @@
     mainPin.addEventListener('keydown', onPinPress);
   };
 
-  var enableMap = function () {
+  var enableActiveMode = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    window.form.toggleStateOfForm(fieldsets, true);
+    window.form.toggleState(fieldsets, true);
     window.form.setActiveAddress();
     mainPin.removeEventListener('mousedown', onPinMouseDown);
     mainPin.removeEventListener('keydown', onPinPress);
@@ -146,13 +147,13 @@
 
   var onPinMouseDown = function (evt) {
     if (evt.which === 1) {
-      enableMap();
+      enableActiveMode();
     }
   };
 
   var onPinPress = function (evt) {
     if (evt.key === 'Enter') {
-      enableMap();
+      enableActiveMode();
     }
   };
 
@@ -174,8 +175,8 @@
     closeOfferCard: closeOfferCard,
     onCardMouseDown: onCardMouseDown,
     onEscPress: onEscPress,
-    disableMap: disableMap,
-    enableMap: enableMap
+    disableActiveMode: disableActiveMode,
+    enableActiveMode: enableActiveMode
   };
 
 })();
