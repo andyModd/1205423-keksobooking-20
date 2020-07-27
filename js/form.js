@@ -1,8 +1,5 @@
 'use strict';
 (function () {
-  var successfullMessageTemplate = document.querySelector('#success').content.querySelector('.success');
-  var unsuccessfullMessageTemplate = document.querySelector('#error').content.querySelector('.error');
-  var main = document.querySelector('main');
   var mainPin = document.querySelector('.map__pin--main');
   var capacitySelect = document.querySelector('#capacity');
   var roomSelect = document.querySelector('#room_number');
@@ -12,8 +9,6 @@
   var timeIn = document.querySelector('#timein');
   var timeOut = document.querySelector('#timeout');
   var addressInput = document.querySelector('#address');
-  var adForm = document.querySelector('.ad-form');
-  var resetButton = adForm.querySelector('.ad-form__reset');
 
   var toggleStateOfForm = function (elements, isActive) {
     if (isActive) {
@@ -60,74 +55,6 @@
     }
   };
 
-  var onSuccessMessageEscPress = function (evt) {
-    if (evt.key === 'Escape') {
-      removeSuccessMessage();
-    }
-  };
-
-  var onWindowSuccessMessageClick = function (evt) {
-    if (evt.target.matches('.success')) {
-      removeSuccessMessage();
-    }
-  };
-
-  var removeSuccessMessage = function () {
-    document.querySelector('.success').remove();
-  };
-
-  var onSuccessMessage = function () {
-    var successfullMessage = successfullMessageTemplate.cloneNode(true);
-    main.appendChild(successfullMessage);
-    document.addEventListener('keydown', onSuccessMessageEscPress);
-    document.addEventListener('click', onWindowSuccessMessageClick);
-  };
-
-  var removeUnsuccessfullMessage = function () {
-    document.querySelector('.error').remove();
-  };
-
-  var onErrorButtonClick = function () {
-    removeUnsuccessfullMessage();
-  };
-
-  var onUnSuccessfullMessageEscPress = function (evt) {
-    if (evt.key === 'Escape') {
-      removeUnsuccessfullMessage();
-    }
-  };
-
-  var onWindowUnsuccessfullMessageClick = function (evt) {
-    if (evt.target.matches('.error')) {
-      removeUnsuccessfullMessage();
-    }
-  };
-
-  var onUnsuccessfullMessage = function (errorMessage) {
-    var unSuccessfullMessage = unsuccessfullMessageTemplate.cloneNode(true);
-    var messageText = unSuccessfullMessage.querySelector('.error__message');
-    messageText.textContent = errorMessage;
-    main.appendChild(unSuccessfullMessage);
-    var errorButton = unSuccessfullMessage.querySelector('.error__button');
-    errorButton.addEventListener('click', onErrorButtonClick);
-    document.addEventListener('keydown', onUnSuccessfullMessageEscPress);
-    document.addEventListener('click', onWindowUnsuccessfullMessageClick);
-  };
-
-  var onSubmit = function (evt) {
-    window.backend.upload(new FormData(adForm), onSuccessMessage, onUnsuccessfullMessage);
-    window.map.disableActiveMode();
-    evt.preventDefault();
-  };
-
-  var onResetButtonClick = function (evt) {
-    evt.preventDefault();
-    window.map.disableActiveMode();
-  };
-
-  adForm.addEventListener('submit', onSubmit);
-  resetButton.addEventListener('click', onResetButtonClick);
-
   offerTitle.addEventListener('input', function () {
     switch (true) {
       case offerTitle.validity.tooShort:
@@ -145,25 +72,16 @@
     }
   });
 
+  var minRoomPrice = {
+    'bungalo': 0,
+    'flat': 1000,
+    'house': 5000,
+    'palace': 10000
+  };
+
   typeSelect.addEventListener('change', function () {
-    switch (typeSelect.value) {
-      case 'bungalo':
-        priceInput.minValue = 0;
-        priceInput.placeholder = '0';
-        break;
-      case 'flat':
-        priceInput.minValue = 1000;
-        priceInput.placeholder = '1000';
-        break;
-      case 'house':
-        priceInput.minValue = 5000;
-        priceInput.placeholder = '5000';
-        break;
-      case 'palace':
-        priceInput.minValue = 10000;
-        priceInput.placeholder = '10000';
-        break;
-    }
+    priceInput.minValue = minRoomPrice[typeSelect.value];
+    priceInput.placeholder = minRoomPrice[typeSelect.value];
   });
 
   priceInput.addEventListener('input', function () {

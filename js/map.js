@@ -1,5 +1,8 @@
 'use strict';
 (function () {
+  var successfullMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+  var unsuccessfullMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+  var main = document.querySelector('main');
   var map = document.querySelector('.map');
   var mapForPins = map.querySelector('.map__pins');
   var mainPin = document.querySelector('.map__pin--main');
@@ -51,8 +54,8 @@
   };
 
 
-  var onSuccessMessageEscPress = function (evt) {
-    if (evt.key === 'Escape') {
+  var onSuccessMessageEscPress = function () {
+    if (window.util.isEscPressed) {
       removeSuccessMessage();
     }
   };
@@ -68,8 +71,8 @@
   };
 
   var onSuccessMessage = function () {
-    var successfullMessage = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
-    document.querySelector('main').appendChild(successfullMessage);
+    var successfullMessage = successfullMessageTemplate.cloneNode(true);
+    main.appendChild(successfullMessage);
     document.addEventListener('keydown', onSuccessMessageEscPress);
     document.addEventListener('click', onWindowSuccessMessageClick);
   };
@@ -82,8 +85,8 @@
     removeUnsuccessfullMessage();
   };
 
-  var onUnSuccessfullMessageEscPress = function (evt) {
-    if (evt.key === 'Escape') {
+  var onUnSuccessfullMessageEscPress = function () {
+    if (window.util.isEscPressed) {
       removeUnsuccessfullMessage();
     }
   };
@@ -95,12 +98,10 @@
   };
 
   var onUnsuccessfullMessage = function (errorMessage) {
-    var unSuccessfullMessage = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+    var unSuccessfullMessage = unsuccessfullMessageTemplate.cloneNode(true);
     var messageText = unSuccessfullMessage.querySelector('.error__message');
     messageText.textContent = errorMessage;
-
-    document.querySelector('main').appendChild(unSuccessfullMessage);
-
+    main.appendChild(unSuccessfullMessage);
     var errorButton = unSuccessfullMessage.querySelector('.error__button');
     errorButton.addEventListener('click', onErrorButtonClick);
     document.addEventListener('keydown', onUnSuccessfullMessageEscPress);
@@ -150,26 +151,26 @@
     window.backend.load(window.constants.urlGet, window.constants.requestGet, onSuccessLoad, onErrorLoad);
   };
 
-  var onPinMouseDown = function (evt) {
-    if (evt.which === 1) {
+  var onPinMouseDown = function () {
+    if (window.util.isLeftMouseDown) {
       enableActiveMode();
     }
   };
 
-  var onPinPress = function (evt) {
-    if (evt.key === 'Enter') {
+  var onPinPress = function () {
+    if (window.util.isEnterPressed) {
       enableActiveMode();
     }
   };
 
-  var onEscPress = function (evt) {
-    if (evt.key === 'Escape') {
+  var onEscPress = function () {
+    if (window.util.isEscPressed) {
       closeOfferCard();
     }
   };
 
-  var onCardMouseDown = function (evt) {
-    if (evt.which === 1) {
+  var onCardMouseDown = function () {
+    if (window.util.isLeftMouseDown) {
       closeOfferCard();
     }
   };

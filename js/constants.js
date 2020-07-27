@@ -25,6 +25,10 @@
 
   var DEBOUNCE_INTERVAL = 500;
 
+  var ENTER_KEY = 'Enter';
+  var ESC_KEY = 'Escape';
+  var LEFT_MOUSE_BUTTON = 1;
+
   window.constants = {
     xMin: X_MIN,
     xMax: X_MAX,
@@ -43,6 +47,9 @@
     timeoutInMs: TIMEOUT_IN_MS,
     offerAmount: OFFER_AMOUNT,
     filterDefaultValue: FILTER_DEFAULT_VALUE,
-    debounceInterval: DEBOUNCE_INTERVAL
+    debounceInterval: DEBOUNCE_INTERVAL,
+    enterKey: ENTER_KEY,
+    escKey: ESC_KEY,
+    leftMouseButtonKey: LEFT_MOUSE_BUTTON
   };
 })();
