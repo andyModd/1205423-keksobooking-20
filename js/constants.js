@@ -23,6 +23,8 @@
   var OFFER_AMOUNT = 5;
   var FILTER_DEFAULT_VALUE = 'any';
 
+  var DEBOUNCE_INTERVAL = 500;
+
   window.constants = {
     xMin: X_MIN,
     xMax: X_MAX,
@@ -41,5 +43,6 @@
     timeoutInMs: TIMEOUT_IN_MS,
     offerAmount: OFFER_AMOUNT,
     filterDefaultValue: FILTER_DEFAULT_VALUE,
+    debounceInterval: DEBOUNCE_INTERVAL
   };
 })();
